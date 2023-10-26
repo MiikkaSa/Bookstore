@@ -7,12 +7,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
-import bookstore.web.AppUser;
-import bookstore.web.AppUserRepository;
-import bookstore.web.Book;
-import bookstore.web.BookRepository;
-import bookstore.web.Category;
-import bookstore.web.CategoryRepository;
+import bookstore.com.AppUser;
+import bookstore.com.AppUserRepository;
+import bookstore.com.Book;
+import bookstore.com.BookRepository;
+import bookstore.com.Category;
+import bookstore.com.CategoryRepository;
 
 
 @SpringBootApplication
@@ -21,26 +21,23 @@ public class BookstoreApplication {
 
     private static final Logger log = LoggerFactory.getLogger(BookstoreApplication.class);
 
-    private final BookRepository bookRepository; // Constructor injection
-
-    public BookstoreApplication(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
-    }
-
     public static void main(String[] args) {
         SpringApplication.run(BookstoreApplication.class, args);
     }
 
     @Bean
-    public CommandLineRunner bookDemo(CategoryRepository crepository, AppUserRepository urepository) {
+    public CommandLineRunner bookDemo(BookRepository bookRepository, CategoryRepository crepository, AppUserRepository urepository) {
         return (args) -> {
             log.info("categories");
             crepository.save(new Category("Fantasy"));
             crepository.save(new Category("Horror"));
             crepository.save(new Category("Fiction"));
 	
-	AppUser user1 = new AppUser("user", "$2a$06$3jYRJrg0ghaaypjZ/.g4SethoeA51ph3UD4kZi9oPkeMTpjKU5uo6", "user@gmail.com", "USER");
-	AppUser user2 = new AppUser("admin", "$2a$10$0MMwY.IQqpsVc1jC8u7IJ.2rT8b0Cd3b3sfIBGV2zfgnPGtT4r0.C", "admin@gmail.com", "ADMIN");
+            bookRepository.save(new Book("Seikkailukirja", "Miikka Savolainen", 2023, "123-123", 50.00, 
+            		crepository.findByName("Horror").get(0)));
+          
+	AppUser user1 = new AppUser("user", "user@gmail.com","$2a$06$3jYRJrg0ghaaypjZ/.g4SethoeA51ph3UD4kZi9oPkeMTpjKU5uo6" ,"USER");
+	AppUser user2 = new AppUser("admin", "admin@gmail.com","$2a$10$0MMwY.IQqpsVc1jC8u7IJ.2rT8b0Cd3b3sfIBGV2zfgnPGtT4r0.C" ,"ADMIN");
 	urepository.save(user1);
 	urepository.save(user2);
 	

@@ -1,4 +1,4 @@
-package bookstore.web;
+package bookstore.com;
 
 import java.util.List;
 
